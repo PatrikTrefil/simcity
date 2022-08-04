@@ -6,7 +6,7 @@ using TMPro;
 
 public class TimeManager : MonoBehaviour
 {
-    private readonly int defaultTimeScale = 60;
+    private readonly int defaultTimeFactor = 60;
     private float secondsFromBeginning;
     /// <summary>
     /// beginning is Jan 1, 0001
@@ -16,7 +16,7 @@ public class TimeManager : MonoBehaviour
         get => secondsFromBeginning;
         private set
         {
-            textComponent.text = new DateTime().AddSeconds(secondsFromBeginning).ToString("HH:mm dd.MM.yyyy");
+            textComponent.text = new DateTime().AddSeconds(secondsFromBeginning * defaultTimeFactor).ToString("HH:mm dd.MM.yyyy");
             secondsFromBeginning = value;
         }
     }
@@ -24,7 +24,6 @@ public class TimeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = defaultTimeScale;
         SecondsFromBeginning = 0;
     }
 
@@ -32,5 +31,26 @@ public class TimeManager : MonoBehaviour
     void Update()
     {
         SecondsFromBeginning += Time.deltaTime;
+    }
+
+    public void OnTimeScaleDropdownChange(TMP_Dropdown dropdown)
+    {
+        Debug.Log(dropdown.captionText.text);
+        int factor;
+        switch (dropdown.captionText.text)
+        {
+            case "1x":
+                factor = 1;
+                break;
+            case "2x":
+                factor = 2;
+                break;
+            case "3x":
+                factor = 3;
+                break;
+            default:
+                throw new ArgumentException("Unknown value from time scale dropdown");
+        }
+        Time.timeScale = factor;
     }
 }
