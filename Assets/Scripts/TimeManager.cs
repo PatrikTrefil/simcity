@@ -6,51 +6,80 @@ using TMPro;
 
 public class TimeManager : MonoBehaviour
 {
-    private readonly int defaultTimeFactor = 60;
-    private float secondsFromBeginning;
+    /// <summary>
+    /// Used to convert realworld seconds from beginning
+    /// to game time seconds from beginning
+    /// </summary>
+    private readonly int realTimeToGameTimeFactor = 60;
+    /// <summary>
+    /// Backing field for SecondsFromBeginning
+    /// beginning is Jan 1, 0001
+    /// </summary>
+    private float realworldSecondsFromBeginning;
     /// <summary>
     /// beginning is Jan 1, 0001
     /// </summary>
-    public float SecondsFromBeginning
+    public float RealwordSecondsFromBeginning
     {
-        get => secondsFromBeginning;
+        get => realworldSecondsFromBeginning;
         private set
         {
-            textComponent.text = new DateTime().AddSeconds(secondsFromBeginning * defaultTimeFactor).ToString("HH:mm dd.MM.yyyy");
-            secondsFromBeginning = value;
+            realworldSecondsFromBeginning = value;
+            // Update label in UI
+            var gameTimeSecondsFromBeginning = RealworldSecondsToGametimeSecondsFromBeginning(realworldSecondsFromBeginning);
+            textComponent.text = new DateTime().AddSeconds(gameTimeSecondsFromBeginning).ToString("HH:mm dd.MM.yyyy");
         }
     }
+    public TMP_Dropdown timeScaleDropdown;
     public TMP_Text textComponent;
     // Start is called before the first frame update
     void Start()
     {
-        SecondsFromBeginning = 0;
+        RealwordSecondsFromBeginning = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        SecondsFromBeginning += Time.deltaTime;
+        RealwordSecondsFromBeginning += Time.deltaTime;
     }
 
-    public void OnTimeScaleDropdownChange(TMP_Dropdown dropdown)
+    /// <summary>
+    /// Get value which is selected in given dropdown.
+    /// </summary>
+    /// <exception cref="ArgumentException">if the dropdown provided an unknown value</exception>
+    private int GetTimeScaleValueFromDropdown()
     {
-        Debug.Log(dropdown.captionText.text);
-        int factor;
-        switch (dropdown.captionText.text)
+        switch (timeScaleDropdown.captionText.text)
         {
             case "1x":
-                factor = 1;
-                break;
+                return 1;
             case "2x":
-                factor = 2;
-                break;
+                return 2;
             case "3x":
-                factor = 3;
-                break;
+                return 3;
             default:
                 throw new ArgumentException("Unknown value from time scale dropdown");
         }
-        Time.timeScale = factor;
+    }
+
+    public void OnTimeScaleDropdownChange()
+    {
+        Time.timeScale = GetTimeScaleValueFromDropdown();
+    }
+
+    public void OnPauseButtonClick()
+    {
+        Time.timeScale = 0;
+    }
+
+    public void OnPlayButtonClick()
+    {
+        Time.timeScale = GetTimeScaleValueFromDropdown();
+    }
+
+    private float RealworldSecondsToGametimeSecondsFromBeginning(float realworldSecondsFromBeginning)
+    {
+        return realworldSecondsFromBeginning * realTimeToGameTimeFactor;
     }
 }
