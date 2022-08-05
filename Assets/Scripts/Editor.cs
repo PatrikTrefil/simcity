@@ -5,31 +5,33 @@ using UnityEngine.UI;
 
 public class Editor : MonoBehaviour
 {
-    public GameObject DefaultBlockPrefab;
-    public GameObject RoadBlockPrefab;
-    public GameObject ShopBlockPrefab;
-    public GameObject EditorModeDropdown;
-    public GameObject ResidenceBlockPrefab;
+    public MapBlock DefaultBlockPrefab;
+    public MapBlock RoadBlockPrefab;
+    public MapBlock ShopBlockPrefab;
+    public MapBlock ResidenceBlockPrefab;
+
+    public TMPro.TMP_Dropdown EditorModeDropdown;
+
     public int GridSize { get; } = 8; // currently only square grids are supported
-    public GameObject[,] Map;
+    public MapBlock[,] Map;
     public Editor()
     {
-        Map = new GameObject[GridSize, GridSize];
+        Map = new MapBlock[GridSize, GridSize];
     }
     void Awake()
     {
         for (int y = 0; y < GridSize; y++)
             for (int x = 0; x < GridSize; x++)
-                Map[x, y] = MapBlock.MakeMapBlockGameObject(DefaultBlockPrefab, transform, new Vector2Int(x, y));
+                Map[x, y] = MapBlock.MakeMapBlock(DefaultBlockPrefab, transform, new Vector2Int(x, y));
     }
 
     public void ReplaceMapBlock(Vector2Int coordinates)
     {
-        var mode = EditorModeDropdown.GetComponent<TMPro.TMP_Dropdown>().captionText.text;
+        var mode = EditorModeDropdown.captionText.text;
 
         Debug.Log($"Replace block on ${coordinates} (mode: ${mode})");
 
-        GameObject chosenPrefab;
+        MapBlock chosenPrefab;
         switch (mode)
         {
             case "Build residence":
@@ -48,12 +50,12 @@ public class Editor : MonoBehaviour
                 throw new System.ArgumentException("Unknown editor mode");
         }
 
-        Destroy(Map[coordinates.x, coordinates.y]);
+        Destroy(Map[coordinates.x, coordinates.y].gameObject);
 
         var x = coordinates.x;
         var y = coordinates.y;
 
-        Map[x, y] = MapBlock.MakeMapBlockGameObject(chosenPrefab, transform, new Vector2Int(x, y));
+        Map[x, y] = MapBlock.MakeMapBlock(chosenPrefab, transform, new Vector2Int(x, y));
         // set the right index to display in the right spot (displaying is done by Grid Layout group)
         Map[x, y].transform.SetSiblingIndex((GridSize * coordinates.y) + coordinates.x);
     }

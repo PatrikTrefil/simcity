@@ -10,10 +10,10 @@ abstract public class MapBlock : MonoBehaviour
         transform.parent.GetComponent<Editor>().ReplaceMapBlock(Coordinates);
     }
 
-    public static GameObject MakeMapBlockGameObject(GameObject blockPrefab, Transform transform, Vector2Int coordinates)
+    public static MapBlock MakeMapBlock(MapBlock blockPrefab, Transform transform, Vector2Int coordinates)
     {
-        var newBlock = Instantiate(blockPrefab, transform);
-        newBlock.GetComponent<MapBlock>().Coordinates = coordinates;
+        var newBlock = Instantiate(blockPrefab.gameObject, transform).GetComponent<MapBlock>();
+        newBlock.Coordinates = coordinates;
         return newBlock;
     }
 }
