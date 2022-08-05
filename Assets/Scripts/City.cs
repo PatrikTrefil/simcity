@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class City : MonoBehaviour
 {
+    public Population population;
+
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SimulateCity());    
+        StartCoroutine(SimulateCity());
     }
 
     IEnumerator SimulateCity()
@@ -20,8 +22,14 @@ public class City : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// simulate one step of all people
+    /// </summary>
     void SimulateOneStep()
     {
-        Debug.Log("Simulate one step");
+        foreach (var person in population.People)
+        {
+            person.SimulateOneStep();
+        }
     }
 }
