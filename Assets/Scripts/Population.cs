@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Population : MonoBehaviour
 {
-    public int startPopulationCount = 1000;
+    public City city;
     public TMP_Text populationCountLabel;
     public ObservableCollection<CityResident> People { get; }
 
@@ -21,19 +21,12 @@ public class Population : MonoBehaviour
 
         People.CollectionChanged += OnPeopleChange;
 
-        AddRandomPeopleToPopulation(startPopulationCount);
+        StartCoroutine(ResidentFluctuation());
     }
 
     // Update is called once per frame
     void Update()
     {
-    }
-    private void AddRandomPeopleToPopulation(int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            People.Add(CityResident.GenerateRandomCityResident());
-        }
     }
     /// <summary>
     /// Updates population count on actions which modify count
@@ -47,6 +40,42 @@ public class Population : MonoBehaviour
             )
         {
             populationCountLabel.text = People.Count.ToString();
+        }
+    }
+
+    /// <summary>
+    /// this coroutines takes care of people moving in
+    /// to the city and moving out
+    /// </summary>
+    private IEnumerator ResidentFluctuation()
+    {
+        while (true)
+        {
+            var rnd = Random.Range(0, 100);
+            if (rnd < 40)
+            {
+                // random person moves in
+                CityResident resident = CityResident.GenerateRandomCityResident(city.map);
+                if (resident != null)
+                {
+                    Debug.Log($"Somebody moved in (rnd: {rnd})");
+                    city.AddCityResidentToCity(resident);
+                    Debug.Log($"Resident {resident.FirstName} just moved in");
+                }
+            }
+            else if (rnd < 60 && People.Count > 0)
+            {
+                // random person moves out
+                var indexToRemove = Random.Range(0, People.Count);
+                city.RemoveCityResidentFromCity(People[indexToRemove]);
+                Debug.Log($"Somebody moved out (rnd: {rnd})");
+            }
+            else
+            {
+                Debug.Log($"Nothing happened (rnd: {rnd})");
+            }
+
+            yield return new WaitForSeconds(1);
         }
     }
 }
