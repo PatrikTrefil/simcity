@@ -16,7 +16,7 @@ public class CityResident : Person
     /// </summary>
     public int DailyWage { get; private set; }
     private IEnumerator simulator;
-    public CityResident(string firstName, string lastName, int age, ResidenceBlock residence, ShopBlock workplace) : base(firstName, lastName, age)
+    public CityResident(string firstName, string lastName, int age, Map map, ResidenceBlock residence, ShopBlock workplace) : base(firstName, lastName, age, map)
     {
         Residence = residence;
         Workplace = workplace;
@@ -38,7 +38,10 @@ public class CityResident : Person
         // WARNING: this runs in parallel
         while (true)
         {
-            Debug.Log($"Simulating one step of {FirstName} {LastName} (age: {Age}");
+            int randomX = new System.Random().Next(0, 7);
+            int randomY = new System.Random().Next(0, 7);
+            Debug.Log($"Randomly move to ({randomX} {randomY})");
+            MoveTo(Map.blocks[randomX, randomY]);
             yield return null;
         }
     }
@@ -64,8 +67,30 @@ public class CityResident : Person
             Faker.Name.First(),
             Faker.Name.Last(),
             Faker.RandomNumber.Next(0, 100),
+            map,
             residence,
             workplace
         );
+    }
+
+    void MoveTo(MapBlock destBlock)
+    {
+        if (destBlock != CurrentBlock)
+        {
+            lock (Map.blockLocks[destBlock.Coordinates.x, destBlock.Coordinates.y])
+            {
+                // TODO: should have multiple capacities
+                if (destBlock.PeopleHere.Count < destBlock.PeopleHere.Capacity)
+                {
+                    lock (Map.blockLocks[CurrentBlock.Coordinates.x, CurrentBlock.Coordinates.y])
+                    {
+                        CurrentBlock.PeopleHere.Remove(this);
+                        destBlock.PeopleHere.Add(this);
+                        CurrentBlock = destBlock;
+                        Debug.Log($"{FirstName} {LastName} moved to ({destBlock.Coordinates.x}, {destBlock.Coordinates.y})");
+                    }
+                }
+            }
+        }
     }
 }

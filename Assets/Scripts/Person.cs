@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Person
 {
+    protected Map Map { get; }
     public string FirstName { get; }
     public string LastName { get; }
     public int Age { get; protected set; }
@@ -14,11 +15,12 @@ public abstract class Person
     /// </summary>
     public MapBlock CurrentBlock { get; protected set; }
 
-    protected Person(string firstName, string lastName, int age)
+    protected Person(string firstName, string lastName, int age, Map map)
     {
         FirstName = firstName;
         LastName = lastName;
         Age = age;
+        Map = map;
     }
 
     public abstract void SimulateOneStep();

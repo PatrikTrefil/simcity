@@ -12,9 +12,19 @@ public class Map : MonoBehaviour
 
     public int GridSize { get; } = 8; // currently only square grids are supported
     public MapBlock[,] blocks;
+
+    public object[,] blockLocks;
     public Map()
     {
         blocks = new MapBlock[GridSize, GridSize];
+        blockLocks = new object[GridSize, GridSize];
+        for (int i = 0; i < blockLocks.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockLocks.GetLength(1); j++)
+            {
+                blockLocks[i, j] = new object();
+            }
+        }
     }
     void Awake()
     {
