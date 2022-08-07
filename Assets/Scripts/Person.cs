@@ -6,13 +6,13 @@ public abstract class Person
 {
     public string FirstName { get; }
     public string LastName { get; }
-    public int Age { get; private set; }
+    public int Age { get; protected set; }
 
     /// <summary>
     /// Reference to the block where the person
     /// currently is
     /// </summary>
-    public MapBlock CurrentBlock { get; private set; }
+    public MapBlock CurrentBlock { get; protected set; }
 
     protected Person(string firstName, string lastName, int age)
     {
