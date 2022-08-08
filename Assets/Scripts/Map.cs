@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Map : MonoBehaviour
+public sealed class Map : MonoBehaviour
 {
     public MapBlock DefaultBlockPrefab;
     public MapBlock RoadBlockPrefab;
@@ -26,7 +26,7 @@ public class Map : MonoBehaviour
             }
         }
     }
-    void Awake()
+    private void Awake()
     {
         for (int y = 0; y < GridSize; y++)
             for (int x = 0; x < GridSize; x++)

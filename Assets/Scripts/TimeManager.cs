@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TimeManager : MonoBehaviour
+public sealed class TimeManager : MonoBehaviour
 {
     /// <summary>
     /// Used to convert realworld seconds from beginning
@@ -34,13 +34,13 @@ public class TimeManager : MonoBehaviour
     public TMP_Text textComponent;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         RealwordSecondsFromBeginning = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         RealwordSecondsFromBeginning += Time.deltaTime;
     }

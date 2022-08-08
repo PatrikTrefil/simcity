@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Editor : MonoBehaviour
+public sealed class Editor : MonoBehaviour
 {
 
     public TMPro.TMP_Dropdown EditorModeDropdown;

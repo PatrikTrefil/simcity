@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
 
-public class Population : MonoBehaviour
+public sealed class Population : MonoBehaviour
 {
     public City city;
     public TMP_Text populationCountLabel;
@@ -15,7 +15,7 @@ public class Population : MonoBehaviour
         People = new ObservableCollection<CityResident>();
     }
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         populationCountLabel.text = People.Count.ToString();
 
@@ -25,7 +25,7 @@ public class Population : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() { }
+    private void Update() { }
 
     /// <summary>
     /// Updates population count on actions which modify count

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResidenceBlock : MapBlock
+public sealed class ResidenceBlock : MapBlock
 {
     public override int PeopleHereCapacity { get => ResidentsCapacity; }
     public int ResidentsCapacity { get; } = 1;

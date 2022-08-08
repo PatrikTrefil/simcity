@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class City : MonoBehaviour
+public sealed class City : MonoBehaviour
 {
     public Population population;
     public Map map;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         StartCoroutine(SimulateCity());
     }
 
-    IEnumerator SimulateCity()
+    private IEnumerator SimulateCity()
     {
         while (true)
         {
@@ -27,7 +27,7 @@ public class City : MonoBehaviour
     /// <summary>
     /// simulate one step of all people
     /// </summary>
-    void SimulateOneStep()
+    private void SimulateOneStep()
     {
         if (population.People.Count > 0)
         {

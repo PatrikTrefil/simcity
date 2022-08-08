@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CityResident : Person
+public sealed class CityResident : Person
 {
     /// <summary>
     /// Home
@@ -288,7 +288,7 @@ public class CityResident : Person
     /// </summary>
     /// <returns>true of the move succeeded or false if the move failed (there
     /// were too many people on the destination block)</returns>
-    bool MoveTo(MapBlock destBlock)
+    private bool MoveTo(MapBlock destBlock)
     {
         if (destBlock != CurrentBlock)
         {
