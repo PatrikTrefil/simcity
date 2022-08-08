@@ -4,77 +4,80 @@ using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
 
-public sealed class Population : MonoBehaviour
+namespace Simcity
 {
-    public City city;
-    public TMP_Text populationCountLabel;
-    public ObservableCollection<CityResident> People { get; }
-
-    public Population()
+    public sealed class Population : MonoBehaviour
     {
-        People = new ObservableCollection<CityResident>();
-    }
-    // Start is called before the first frame update
-    private void Start()
-    {
-        populationCountLabel.text = People.Count.ToString();
+        public City city;
+        public TMP_Text populationCountLabel;
+        public ObservableCollection<CityResident> People { get; }
 
-        People.CollectionChanged += OnPeopleChange;
-
-        StartCoroutine(ResidentFluctuation());
-    }
-
-    // Update is called once per frame
-    private void Update() { }
-
-    /// <summary>
-    /// Updates population count on actions which modify count
-    /// </summary>
-    private void OnPeopleChange(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        if (
-            e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-            e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-            e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset
-            )
+        public Population()
+        {
+            People = new ObservableCollection<CityResident>();
+        }
+        // Start is called before the first frame update
+        private void Start()
         {
             populationCountLabel.text = People.Count.ToString();
+
+            People.CollectionChanged += OnPeopleChange;
+
+            StartCoroutine(ResidentFluctuation());
         }
-    }
 
-    /// <summary>
-    /// this coroutines takes care of people moving in
-    /// to the city and moving out
-    /// </summary>
-    private IEnumerator ResidentFluctuation()
-    {
-        while (true)
+        // Update is called once per frame
+        private void Update() { }
+
+        /// <summary>
+        /// Updates population count on actions which modify count
+        /// </summary>
+        private void OnPeopleChange(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            var rnd = Random.Range(0, 100);
-            if (rnd < 40)
+            if (
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset
+                )
             {
-                // random person moves in
-                CityResident resident = CityResident.GenerateRandomCityResident(city.map);
-                if (resident != null)
-                {
-                    Debug.Log($"Somebody moved in (rnd: {rnd})");
-                    city.AddCityResidentToCity(resident);
-                    Debug.Log($"Resident {resident.FirstName} just moved in");
-                }
+                populationCountLabel.text = People.Count.ToString();
             }
-            else if (rnd < 60 && People.Count > 0)
-            {
-                // random person moves out
-                var indexToRemove = Random.Range(0, People.Count);
-                city.RemoveCityResidentFromCity(People[indexToRemove]);
-                Debug.Log($"Somebody moved out (rnd: {rnd})");
-            }
-            else
-            {
-                Debug.Log($"Nothing happened (rnd: {rnd})");
-            }
+        }
 
-            yield return new WaitForSeconds(1);
+        /// <summary>
+        /// this coroutines takes care of people moving in
+        /// to the city and moving out
+        /// </summary>
+        private IEnumerator ResidentFluctuation()
+        {
+            while (true)
+            {
+                var rnd = Random.Range(0, 100);
+                if (rnd < 40)
+                {
+                    // random person moves in
+                    CityResident resident = CityResident.GenerateRandomCityResident(city.map);
+                    if (resident != null)
+                    {
+                        Debug.Log($"Somebody moved in (rnd: {rnd})");
+                        city.AddCityResidentToCity(resident);
+                        Debug.Log($"Resident {resident.FirstName} just moved in");
+                    }
+                }
+                else if (rnd < 60 && People.Count > 0)
+                {
+                    // random person moves out
+                    var indexToRemove = Random.Range(0, People.Count);
+                    city.RemoveCityResidentFromCity(People[indexToRemove]);
+                    Debug.Log($"Somebody moved out (rnd: {rnd})");
+                }
+                else
+                {
+                    Debug.Log($"Nothing happened (rnd: {rnd})");
+                }
+
+                yield return new WaitForSeconds(1);
+            }
         }
     }
 }
