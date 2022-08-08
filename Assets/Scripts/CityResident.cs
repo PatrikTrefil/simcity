@@ -84,7 +84,6 @@ public class CityResident : Person
         {
             lock (Map.blockLocks[destBlock.Coordinates.x, destBlock.Coordinates.y])
             {
-                // TODO: should have multiple capacities
                 if (destBlock.PeopleHere.Count < destBlock.PeopleHere.Capacity)
                 {
                     lock (Map.blockLocks[CurrentBlock.Coordinates.x, CurrentBlock.Coordinates.y])

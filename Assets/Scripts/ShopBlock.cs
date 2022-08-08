@@ -4,13 +4,15 @@ using UnityEngine;
 
 sealed public class ShopBlock : MapBlock
 {
-    public int Capacity { get; } = 100;
-    public List<Person> Tourists;
+    public int WorkersCapacity { get; } = 100;
+    public int ShoppersCapacity { get; } = 100;
+
+    public List<Person> Shoppers;
     public List<CityResident> Workers;
 
     public ShopBlock()
     {
         Workers = new List<CityResident>();
-        Tourists = new List<Person>();
+        Shoppers = new List<Person>();
     }
 }

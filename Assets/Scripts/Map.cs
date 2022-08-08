@@ -41,7 +41,7 @@ public class Map : MonoBehaviour
             for (int x = 0; x < blocks.GetLength(0); x++)
             {
                 var residenceBlock = blocks[x, y].GetComponent<ResidenceBlock>();
-                if (residenceBlock != null && residenceBlock.Capacity > residenceBlock.Residents.Count)
+                if (residenceBlock != null && residenceBlock.ResidentsCapacity > residenceBlock.Residents.Count)
                     availableResidences.Add(residenceBlock);
 
             }
@@ -58,7 +58,7 @@ public class Map : MonoBehaviour
             for (int x = 0; x < blocks.GetLength(0); x++)
             {
                 var shopBlock = blocks[x, y].GetComponent<ShopBlock>();
-                if (shopBlock != null && shopBlock.Capacity > shopBlock.Workers.Count)
+                if (shopBlock != null && shopBlock.WorkersCapacity > shopBlock.Workers.Count)
                     availableWorkplaces.Add(shopBlock);
             }
         }
