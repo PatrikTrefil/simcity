@@ -41,7 +41,7 @@ public sealed class CityResident : Person
         simulator = GetSimulator();
     }
 
-    public IEnumerator GetSimulator()
+    private IEnumerator GetSimulator()
     {
         while (true)
         {
@@ -54,7 +54,7 @@ public sealed class CityResident : Person
         }
     }
 
-    public IEnumerable GetShoppingSimulator()
+    private IEnumerable GetShoppingSimulator()
     {
         // WARNING: this runs in parallel
         var availableShops = Map.GetAvailableShops();
