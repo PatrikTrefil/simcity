@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class ResidenceBlock : MapBlock
 {
-    public int ResidentsCapacity { get; } = 100;
+    public override int PeopleHereCapacity { get => ResidentsCapacity; }
+    public int ResidentsCapacity { get; } = 1;
     public List<CityResident> Residents;
-    public ResidenceBlock()
+    public ResidenceBlock() : base()
     {
         Residents = new List<CityResident>();
     }

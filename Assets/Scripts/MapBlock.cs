@@ -6,6 +6,7 @@ abstract public class MapBlock : MonoBehaviour
 {
     public Vector2Int Coordinates { get; private set; }
     public List<Person> PeopleHere { get; }
+    public abstract int PeopleHereCapacity { get; }
 
     public MapBlock()
     {

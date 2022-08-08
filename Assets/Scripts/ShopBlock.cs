@@ -4,13 +4,14 @@ using UnityEngine;
 
 sealed public class ShopBlock : MapBlock
 {
+    public override int PeopleHereCapacity { get => WorkersCapacity + ShoppersCapacity; }
     public int WorkersCapacity { get; } = 100;
     public int ShoppersCapacity { get; } = 100;
 
     public List<Person> Shoppers;
     public List<CityResident> Workers;
 
-    public ShopBlock()
+    public ShopBlock() : base()
     {
         Workers = new List<CityResident>();
         Shoppers = new List<Person>();

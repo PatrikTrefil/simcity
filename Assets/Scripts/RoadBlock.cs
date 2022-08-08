@@ -4,9 +4,10 @@ using UnityEngine;
 
 sealed public class RoadBlock : MapBlock
 {
-    public int Level { get; } = 0;
-    public int Capacity
+    public int Level { get; } = 100;
+    public override int PeopleHereCapacity
     {
         get => Level * 100;
     }
+    public RoadBlock() : base() { }
 }
