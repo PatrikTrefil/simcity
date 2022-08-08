@@ -65,4 +65,21 @@ public class Map : MonoBehaviour
 
         return availableWorkplaces;
     }
+
+    public List<ShopBlock> GetAvailableShops()
+    {
+
+        var availableShops = new List<ShopBlock>();
+        for (int y = 0; y < blocks.GetLength(1); y++)
+        {
+            for (int x = 0; x < blocks.GetLength(0); x++)
+            {
+                var shopBlock = blocks[x, y] as ShopBlock;
+                if (shopBlock != null && shopBlock.ShoppersCapacity > shopBlock.Shoppers.Count)
+                    availableShops.Add(shopBlock);
+            }
+        }
+
+        return availableShops;
+    }
 }
