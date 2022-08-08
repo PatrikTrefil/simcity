@@ -25,9 +25,8 @@ public class Population : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-    }
+    void Update() { }
+
     /// <summary>
     /// Updates population count on actions which modify count
     /// </summary>

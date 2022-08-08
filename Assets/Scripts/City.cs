@@ -54,6 +54,7 @@ public class City : MonoBehaviour
         person.Residence.Residents.Add(person);
         person.Workplace.Workers.Add(person);
     }
+
     /// <summary>
     /// remove person from the map, remove from population,
     /// remove from list of residents of its residence,

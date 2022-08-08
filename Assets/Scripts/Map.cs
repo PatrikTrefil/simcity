@@ -49,6 +49,7 @@ public class Map : MonoBehaviour
 
         return availableResidences;
     }
+
     public List<ShopBlock> GetAvailableWorkplaces()
     {
         var availableWorkplaces = new List<ShopBlock>();

@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
@@ -32,6 +32,7 @@ public class TimeManager : MonoBehaviour
     }
     public TMP_Dropdown timeScaleDropdown;
     public TMP_Text textComponent;
+
     // Start is called before the first frame update
     void Start()
     {

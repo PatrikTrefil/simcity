@@ -24,6 +24,7 @@ public abstract class Person
     }
 
     public abstract void SimulateOneStep();
+
     /// <summary>
     /// teleport home/start position of tourist and restart behavior algorithm
     /// </summary>

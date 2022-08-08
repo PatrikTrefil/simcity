@@ -16,6 +16,7 @@ public class CityResident : Person
     /// </summary>
     public int DailyWage { get; private set; }
     private IEnumerator simulator;
+
     public CityResident(string firstName, string lastName, int age, Map map, ResidenceBlock residence, ShopBlock workplace) : base(firstName, lastName, age, map)
     {
         Residence = residence;
@@ -23,16 +24,19 @@ public class CityResident : Person
         simulator = GetSimulator();
         CurrentBlock = residence;
     }
+
     public override void SimulateOneStep()
     {
         // WARNING: this runs in parallel
         simulator.MoveNext();
     }
+
     public override void ResetSimulation()
     {
         // TODO: teleport home
         simulator = GetSimulator();
     }
+
     public IEnumerator GetSimulator()
     {
         // WARNING: this runs in parallel
@@ -45,6 +49,7 @@ public class CityResident : Person
             yield return null;
         }
     }
+
     /// <summary>
     /// </summary>
     /// <param name="map">this will be used to find a residence and workplace</param>
