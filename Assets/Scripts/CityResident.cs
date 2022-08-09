@@ -67,8 +67,13 @@ namespace Simcity
                     }
                     else if (rnd < 60)
                     {
-                        // sleep
-                        // TODO: implement this
+                        // sleep for 8 hours
+                        Debug.Log($"[{FirstName} {LastName}] is going to sleep");
+                        for (int i = 0; i < 8 * 60; i++)
+                        {
+                            yield return null;
+                        }
+                        Debug.Log($"[{FirstName} {LastName}] just woke up");
                     }
                     else
                     {
