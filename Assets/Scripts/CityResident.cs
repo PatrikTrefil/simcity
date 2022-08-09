@@ -50,24 +50,42 @@ namespace Simcity
         {
             while (true)
             {
-                // TODO: implement working
-                int rnd = UnityEngine.Random.Range(1, 101);
-                if (rnd < 99)
+                // actions
                 {
-                    var shoppingSimulator = GetShoppingSimulator();
-                    var shoppingEnumerator = shoppingSimulator.GetEnumerator();
-                    var notEndReached = shoppingEnumerator.MoveNext();
-                    while (notEndReached)
+                    int rnd = UnityEngine.Random.Range(1, 101);
+                    if (rnd < 50)
                     {
-                        notEndReached = shoppingEnumerator.MoveNext();
+                        // go shopping
+                        var shoppingSimulator = GetShoppingSimulator();
+                        var shoppingEnumerator = shoppingSimulator.GetEnumerator();
+                        var notEndReached = shoppingEnumerator.MoveNext();
+                        while (notEndReached)
+                        {
+                            notEndReached = shoppingEnumerator.MoveNext();
+                            yield return null;
+                        }
+                    }
+                    else if (rnd < 60)
+                    {
+                        // sleep
+                        // TODO: implement this
+                    }
+                    else
+                    {
+                        // go to work
+                        // TODO: implement this
                         yield return null;
                     }
                 }
-                else
+                // consider moving out
                 {
-                    // move out
-                    City.RemoveCityResidentFromCity(this);
-                    Debug.Log($"[{FirstName} {LastName}] Moved out");
+                    int rndMoveOut = UnityEngine.Random.Range(1, 101);
+                    if (rndMoveOut < City.financeManager.TaxRatePercentage / 10)
+                    {
+                        // move out
+                        City.RemoveCityResidentFromCity(this);
+                        Debug.Log($"[{FirstName} {LastName}] Moved out");
+                    }
                 }
                 // think what to do next (necessary to prevent infinite loop)
                 yield return null;

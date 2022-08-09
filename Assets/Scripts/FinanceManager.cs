@@ -10,7 +10,7 @@ namespace Simcity
         public TMPro.TMP_Text balanceLabel;
         private readonly float pricePerRoadMaintenance = 100;
         public int RoadBlockCount { get; set; }
-        public float TaxRatePercentage { get; set; }
+        public float TaxRatePercentage { get; private set; }
         /// <summary>
         /// used for formatting currency output
         /// </summary>
