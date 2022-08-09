@@ -15,9 +15,9 @@ namespace Simcity
             public MapBlock ResidenceBlockPrefab;
 
             public int GridSize { get; } = 8; // currently only square grids are supported
-            public MapBlock[,] blocks;
+            public readonly MapBlock[,] blocks;
 
-            public object[,] blockLocks;
+            public readonly object[,] blockLocks;
             public Map()
             {
                 blocks = new MapBlock[GridSize, GridSize];

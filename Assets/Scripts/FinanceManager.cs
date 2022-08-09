@@ -12,7 +12,7 @@ namespace Simcity
         /// <summary>
         /// used for formatting currency output
         /// </summary>
-        private System.Globalization.CultureInfo cultureInfo;
+        private readonly System.Globalization.CultureInfo cultureInfo;
         /// <summary>
         /// backing field for Balance
         /// </summary>
@@ -20,7 +20,7 @@ namespace Simcity
         /// <summary>
         /// lock for Balance
         /// </summary>
-        private object balanceLock;
+        private readonly object balanceLock;
         /// <summary>
         /// lock balanceLock if accessing from multiple threads
         /// </summary>
