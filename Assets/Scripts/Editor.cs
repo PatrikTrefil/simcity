@@ -12,6 +12,7 @@ namespace Simcity
 
             public TMPro.TMP_Dropdown EditorModeDropdown;
             public Map map;
+            public City city;
 
 
             public void ReplaceMapBlock(Vector2Int coordinates)
@@ -28,6 +29,7 @@ namespace Simcity
                         break;
                     case "Build road":
                         chosenPrefab = map.RoadBlockPrefab;
+                        city.financeManager.RoadBlockCount++;
                         break;
                     case "Build shop":
                         chosenPrefab = map.ShopBlockPrefab;
@@ -38,11 +40,18 @@ namespace Simcity
                     default:
                         throw new System.ArgumentException("Unknown editor mode");
                 }
-
-                Destroy(map.blocks[coordinates.x, coordinates.y].gameObject);
+                // TODO: prices for building
 
                 var x = coordinates.x;
                 var y = coordinates.y;
+
+                if (map.blocks[x, y] is RoadBlock)
+                {
+                    city.financeManager.RoadBlockCount--;
+                }
+
+                Destroy(map.blocks[x, y].gameObject);
+
 
                 map.blocks[x, y] = MapBlock.MakeMapBlock(chosenPrefab, map.transform, new Vector2Int(x, y));
                 // set the right index to display in the right spot (displaying is done by Grid Layout group)

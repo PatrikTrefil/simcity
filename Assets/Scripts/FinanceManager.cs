@@ -8,6 +8,8 @@ namespace Simcity
     public sealed class FinanceManager : MonoBehaviour
     {
         public TMPro.TMP_Text balanceLabel;
+        private readonly float pricePerRoadMaintenance = 100;
+        public int RoadBlockCount { get; set; }
         public float TaxRatePercentage { get; set; }
         /// <summary>
         /// used for formatting currency output
@@ -49,6 +51,26 @@ namespace Simcity
             Balance = 10000;
             // start tax rate
             TaxRatePercentage = 20;
+
+            StartCoroutine(RoadMaintenance());
+        }
+
+        private IEnumerator RoadMaintenance()
+        {
+            while (true)
+            {
+                float priceForRoadMaintenance = RoadBlockCount * pricePerRoadMaintenance;
+                Debug.Log($"Paying for road maintenance (${priceForRoadMaintenance})");
+                if (priceForRoadMaintenance > 0)
+                {
+                    lock (balanceLock)
+                    {
+                        Balance -= priceForRoadMaintenance;
+                    }
+                }
+                // wait one day
+                yield return new WaitForSeconds(60 * 24);
+            }
         }
 
         public void ShopPayment()
