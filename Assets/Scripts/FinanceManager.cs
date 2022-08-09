@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,7 @@ namespace Simcity
     public sealed class FinanceManager : MonoBehaviour
     {
         public TMPro.TMP_Text balanceLabel;
-        // TODO: add field for user to edit tax rate
-        public float TaxRatePercentage { get; set; } = 20;
+        public float TaxRatePercentage { get; set; }
         /// <summary>
         /// used for formatting currency output
         /// </summary>
@@ -47,6 +47,8 @@ namespace Simcity
         {
             // start balance
             Balance = 10000;
+            // start tax rate
+            TaxRatePercentage = 20;
         }
 
         public void ShopPayment()
@@ -63,6 +65,19 @@ namespace Simcity
             {
                 Balance += wagePaidOut * (TaxRatePercentage / 100);
             }
+        }
+
+        public void OnTaxRateEndEdit(TMPro.TMP_InputField inputField)
+        {
+            try
+            {
+                TaxRatePercentage = float.Parse(inputField.text);
+            }
+            catch (FormatException)
+            {
+                inputField.text = TaxRatePercentage.ToString();
+            }
+            Debug.Log($"TaxRatePercentage set to: {TaxRatePercentage} %");
         }
     }
 }
