@@ -111,8 +111,7 @@ namespace Simcity
                 Debug.Log($"[{FirstName} {LastName}] Started shopping");
 
                 // spend 60 minutes in the shop
-                // HACK: 5
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 60; i++)
                 {
                     yield return null;
                 }
