@@ -89,6 +89,14 @@ namespace Simcity
             }
         }
 
+        public void BlockBuildPayment()
+        {
+            lock (balanceLock)
+            {
+                Balance -= 1000;
+            }
+        }
+
         public void OnTaxRateEndEdit(TMPro.TMP_InputField inputField)
         {
             try

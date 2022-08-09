@@ -40,7 +40,7 @@ namespace Simcity
                     default:
                         throw new System.ArgumentException("Unknown editor mode");
                 }
-                // TODO: prices for building
+                // TODO: remove people from removed block
 
                 var x = coordinates.x;
                 var y = coordinates.y;
@@ -56,6 +56,9 @@ namespace Simcity
                 map.blocks[x, y] = MapBlock.MakeMapBlock(chosenPrefab, map.transform, new Vector2Int(x, y));
                 // set the right index to display in the right spot (displaying is done by Grid Layout group)
                 map.blocks[x, y].transform.SetSiblingIndex((map.GridSize * coordinates.y) + coordinates.x);
+
+                // pay for build
+                city.financeManager.BlockBuildPayment();
             }
         }
     }
