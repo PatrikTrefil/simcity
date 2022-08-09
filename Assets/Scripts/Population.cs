@@ -23,7 +23,7 @@ namespace Simcity
 
             People.CollectionChanged += OnPeopleChange;
 
-            StartCoroutine(ResidentFluctuation());
+            StartCoroutine(MovingInOfResidents());
         }
 
         // Update is called once per frame
@@ -48,7 +48,7 @@ namespace Simcity
         /// this coroutines takes care of people moving in
         /// to the city and moving out
         /// </summary>
-        private IEnumerator ResidentFluctuation()
+        private IEnumerator MovingInOfResidents()
         {
             while (true)
             {
@@ -63,17 +63,6 @@ namespace Simcity
                         city.AddCityResidentToCity(resident);
                         Debug.Log($"Resident {resident.FirstName} just moved in");
                     }
-                }
-                else if (rnd < 60 && People.Count > 0)
-                {
-                    // random person moves out
-                    var indexToRemove = Random.Range(0, People.Count);
-                    city.RemoveCityResidentFromCity(People[indexToRemove]);
-                    Debug.Log($"Somebody moved out (rnd: {rnd})");
-                }
-                else
-                {
-                    Debug.Log($"Nothing happened (rnd: {rnd})");
                 }
 
                 yield return new WaitForSeconds(1);

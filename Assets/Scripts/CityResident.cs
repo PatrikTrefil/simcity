@@ -50,15 +50,26 @@ namespace Simcity
         {
             while (true)
             {
-                // TODO: implement other actions then just going shopping
-                var shoppingSimulator = GetShoppingSimulator();
-                var shoppingEnumerator = shoppingSimulator.GetEnumerator();
-                var notEndReached = shoppingEnumerator.MoveNext();
-                while (notEndReached)
+                // TODO: implement working
+                int rnd = UnityEngine.Random.Range(1, 101);
+                if (rnd < 99)
                 {
-                    notEndReached = shoppingEnumerator.MoveNext();
-                    yield return null;
+                    var shoppingSimulator = GetShoppingSimulator();
+                    var shoppingEnumerator = shoppingSimulator.GetEnumerator();
+                    var notEndReached = shoppingEnumerator.MoveNext();
+                    while (notEndReached)
+                    {
+                        notEndReached = shoppingEnumerator.MoveNext();
+                        yield return null;
+                    }
                 }
+                else
+                {
+                    // move out
+                    City.RemoveCityResidentFromCity(this);
+                    Debug.Log($"[{FirstName} {LastName}] Moved out");
+                }
+                // think what to do next (necessary to prevent infinite loop)
                 yield return null;
             }
         }
