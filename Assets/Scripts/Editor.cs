@@ -40,7 +40,6 @@ namespace Simcity
                     default:
                         throw new System.ArgumentException("Unknown editor mode");
                 }
-                // TODO: remove people from removed block
 
                 var x = coordinates.x;
                 var y = coordinates.y;
@@ -50,6 +49,19 @@ namespace Simcity
                     city.financeManager.RoadBlockCount--;
                 }
 
+                foreach (Person person in map.blocks[x, y].PeopleHere)
+                {
+                    CityResident cityResident = person as CityResident;
+                    if (cityResident != null)
+                    {
+                        city.RemoveCityResidentFromCity(cityResident);
+                    }
+                    else
+                    {
+                        // TODO: remove tourists too
+                        throw new System.NotImplementedException();
+                    }
+                }
                 Destroy(map.blocks[x, y].gameObject);
 
 
