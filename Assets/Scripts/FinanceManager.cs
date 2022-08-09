@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Simcity
 {
@@ -36,6 +38,12 @@ namespace Simcity
             {
                 balance = value;
                 balanceLabel.text = balance.ToString("C2", cultureInfo);
+                if (balance < 0)
+                {
+                    // game lost
+                    EditorUtility.DisplayDialog("You lost", "Your balance has gone below zero.", "Go to main menu");
+                    SceneManager.LoadScene("StartScene");
+                }
             }
         }
 
