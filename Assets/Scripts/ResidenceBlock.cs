@@ -9,7 +9,7 @@ namespace Simcity
         public sealed class ResidenceBlock : MapBlock
         {
             public override int PeopleHereCapacity { get => ResidentsCapacity; }
-            public int ResidentsCapacity { get; } = 1;
+            public int ResidentsCapacity { get; } = 100;
             public List<CityResident> Residents;
             public ResidenceBlock() : base()
             {
