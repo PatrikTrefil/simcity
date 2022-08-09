@@ -78,7 +78,60 @@ namespace Simcity
                     else
                     {
                         // go to work
-                        // TODO: implement this
+                        Debug.Log($"[{FirstName} {LastName}] Going to work");
+                        bool wasJourneyToWorkSuccessful = true;
+                        {
+                            var goToWorkSimulator = SimulateGoTo(Workplace);
+
+                            foreach (var goToWorkStatus in goToWorkSimulator)
+                            {
+                                if (goToWorkStatus)
+                                {
+                                    Debug.Log($"[{FirstName} {LastName}] is now at {CurrentBlock.Coordinates.x} {CurrentBlock.Coordinates.y}");
+                                    yield return null;
+                                }
+                                else
+                                {
+                                    wasJourneyToWorkSuccessful = false;
+                                    Debug.Log($"[{FirstName} {LastName}] journey was disrupted. Going home instead.");
+                                    break;
+                                }
+                            }
+                        }
+                        // work
+                        if (wasJourneyToWorkSuccessful)
+                        {
+                            Debug.Log($"[{FirstName} {LastName}] Started working");
+                            // spend 8 hours working
+                            for (int i = 0; i < 8 * 60; i++)
+                            {
+                                yield return null;
+                            }
+                            City.financeManager.WagePayout(DailyWage);
+                            Debug.Log($"[{FirstName} {LastName}] Finished working");
+                        }
+                        // journey back
+                        {
+                            var goHomeSimulator = SimulateGoTo(Residence);
+                            foreach (var goHomeStatus in goHomeSimulator)
+                            {
+                                if (goHomeStatus)
+                                {
+                                    Debug.Log($"[{FirstName} {LastName}] is now at {CurrentBlock.Coordinates.x} {CurrentBlock.Coordinates.y}");
+                                    yield return null;
+                                }
+                                else
+                                {
+                                    // teleport home
+                                    Debug.Log($"[{FirstName} {LastName}] teleported home");
+                                    var teleportStatus = MoveTo(Residence);
+                                    if (teleportStatus == false)
+                                    {
+                                        throw new Exception("Could not teleport home");
+                                    }
+                                }
+                            }
+                        }
                         yield return null;
                     }
                 }
@@ -96,6 +149,7 @@ namespace Simcity
                 yield return null;
             }
         }
+
 
         private IEnumerable GetShoppingSimulator()
         {
