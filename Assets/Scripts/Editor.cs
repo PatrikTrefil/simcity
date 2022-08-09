@@ -49,19 +49,50 @@ namespace Simcity
                     city.financeManager.RoadBlockCount--;
                 }
 
-                foreach (Person person in map.blocks[x, y].PeopleHere)
+                // remove all people involved with this block
                 {
-                    CityResident cityResident = person as CityResident;
-                    if (cityResident != null)
+                    // remove all people on this block
+                    foreach (Person person in map.blocks[x, y].PeopleHere)
                     {
-                        city.RemoveCityResidentFromCity(cityResident);
+                        CityResident cityResident = person as CityResident;
+                        if (cityResident != null)
+                        {
+                            city.RemoveCityResidentFromCity(cityResident);
+                        }
+                        else
+                        {
+                            // TODO: remove tourists too
+                            throw new System.NotImplementedException();
+                        }
                     }
-                    else
+                    // if it's a shop block, then remove all shoppers and workers
                     {
-                        // TODO: remove tourists too
-                        throw new System.NotImplementedException();
+                        var shopBlock = map.blocks[x, y] as ShopBlock;
+                        if (shopBlock != null)
+                        {
+                            foreach (CityResident shopper in shopBlock.Shoppers)
+                            {
+                                city.RemoveCityResidentFromCity(shopper);
+                            }
+                            foreach (CityResident worker in shopBlock.Workers)
+                            {
+                                city.RemoveCityResidentFromCity(worker);
+                            }
+                        }
+                    }
+                    // if it's a residence block, then remove all residents
+                    {
+                        var residenceBlock = map.blocks[x, y] as ResidenceBlock;
+                        if (residenceBlock != null)
+                        {
+                            foreach (CityResident resident in residenceBlock.Residents)
+                            {
+                                city.RemoveCityResidentFromCity(resident);
+                            }
+                        }
                     }
                 }
+
                 Destroy(map.blocks[x, y].gameObject);
 
 
