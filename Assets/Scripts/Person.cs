@@ -10,7 +10,7 @@ namespace Simcity
         protected Map Map { get; }
         public string FirstName { get; }
         public string LastName { get; }
-        public int Age { get; protected set; }
+        public int Age { get; set; }
 
         /// <summary>
         /// Reference to the block where the person

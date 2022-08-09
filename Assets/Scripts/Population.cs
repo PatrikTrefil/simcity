@@ -24,6 +24,10 @@ namespace Simcity
             People.CollectionChanged += OnPeopleChange;
 
             StartCoroutine(MovingInOfResidents());
+
+            StartCoroutine(PopulationAging());
+
+            StartCoroutine(PopulationDeaths());
         }
 
         // Update is called once per frame
@@ -66,6 +70,45 @@ namespace Simcity
                 }
 
                 yield return new WaitForSeconds(1);
+            }
+        }
+
+        private IEnumerator PopulationAging()
+        {
+            while (true)
+            {
+                // wait for one year
+                yield return new WaitForSeconds(60 * 24 * 7 * 52);
+                // increase everyones age
+                foreach (var person in People)
+                {
+                    person.Age++;
+                }
+                Debug.Log("The population's age has increased by one");
+            }
+        }
+
+        private IEnumerator PopulationDeaths()
+        {
+            while (true)
+            {
+                // wait for one day
+                yield return new WaitForSeconds(60 * 25);
+
+                var rnd = UnityEngine.Random.Range(1, 101);
+
+                if (rnd < 100 && People.Count > 0)
+                {
+                    // oldest person dies
+                    CityResident oldestPerson = People[0];
+                    foreach (var person in People)
+                    {
+                        if (person.Age > oldestPerson.Age)
+                            oldestPerson = person;
+                    }
+                    Debug.Log($"[{oldestPerson.FirstName} {oldestPerson.LastName}] Died");
+                    city.RemoveCityResidentFromCity(oldestPerson);
+                }
             }
         }
     }
