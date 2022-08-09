@@ -56,7 +56,7 @@ namespace Simcity
                 if (rnd < 40)
                 {
                     // random person moves in
-                    CityResident resident = CityResident.GenerateRandomCityResident(city.map);
+                    CityResident resident = CityResident.GenerateRandomCityResident(city);
                     if (resident != null)
                     {
                         Debug.Log($"Somebody moved in (rnd: {rnd})");

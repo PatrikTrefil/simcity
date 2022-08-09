@@ -10,6 +10,7 @@ namespace Simcity
     {
         public Population population;
         public Map map;
+        public FinanceManager financeManager;
 
         // Start is called before the first frame update
         private void Start()
@@ -34,10 +35,14 @@ namespace Simcity
         {
             if (population.People.Count > 0)
             {
-                Parallel.For(0, population.People.Count, (int index) =>
+                //Parallel.For(0, population.People.Count, (int index) =>
+                //{
+                //    population.People[index].SimulateOneStep();
+                //});
+                for (int i = 0; i < population.People.Count; i++)
                 {
-                    population.People[index].SimulateOneStep();
-                });
+                    population.People[i].SimulateOneStep();
+                }
             }
             else
             {

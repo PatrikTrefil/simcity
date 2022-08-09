@@ -18,14 +18,16 @@ namespace Simcity
         /// Paid out right after finishing work.
         /// </summary>
         public int DailyWage { get; private set; }
+        private City City { get; }
         private IEnumerator simulator;
 
-        public CityResident(string firstName, string lastName, int age, Map map, ResidenceBlock residence, ShopBlock workplace) : base(firstName, lastName, age, map)
+        public CityResident(string firstName, string lastName, int age, City city, ResidenceBlock residence, ShopBlock workplace) : base(firstName, lastName, age, city.map)
         {
             Residence = residence;
             Workplace = workplace;
             simulator = GetSimulator();
             CurrentBlock = residence;
+            City = city;
         }
 
         public override void SimulateOneStep()
@@ -50,10 +52,14 @@ namespace Simcity
             {
                 // TODO: implement other actions then just going shopping
                 var shoppingSimulator = GetShoppingSimulator();
-                foreach (var _ in shoppingSimulator)
+                var shoppingEnumerator = shoppingSimulator.GetEnumerator();
+                var notEndReached = shoppingEnumerator.MoveNext();
+                while (notEndReached)
                 {
+                    notEndReached = shoppingEnumerator.MoveNext();
                     yield return null;
                 }
+                yield return null;
             }
         }
 
@@ -67,6 +73,7 @@ namespace Simcity
 
             // go to shop
             var goToShopSimulator = SimulateGoTo(randomShop);
+            bool wasJourneyToShopSuccessful = true;
             foreach (var goToShopStatus in goToShopSimulator)
             {
                 if (goToShopStatus)
@@ -76,14 +83,35 @@ namespace Simcity
                 }
                 else
                 {
+                    wasJourneyToShopSuccessful = false;
                     Debug.Log($"[{FirstName} {LastName}] journey was disrupted. Going home instead.");
                     break;
                 }
             }
             // shopping
+            if (wasJourneyToShopSuccessful)
+            {
+                ShopBlock shop = CurrentBlock as ShopBlock;
 
-            // TODO: implement shopping (transaction)
-            // register as shopper, spend some time in the shop, perfrom transaction, unregiser as shopper and go home
+                if (shop == null) throw new Exception("Shop is null");
+
+                shop.Shoppers.Add(this);
+
+                Debug.Log($"[{FirstName} {LastName}] Started shopping");
+
+                // spend 60 minutes in the shop
+                // HACK: 5
+                for (int i = 0; i < 5; i++)
+                {
+                    yield return null;
+                }
+
+                City.financeManager.ShopPayment();
+                shop.Shoppers.Remove(this);
+
+                Debug.Log($"[{FirstName} {LastName}] Finished shopping");
+            }
+
 
             // go home
             if (CurrentBlock != Residence)
@@ -263,13 +291,13 @@ namespace Simcity
         /// </summary>
         /// <param name="map">this will be used to find a residence and workplace</param>
         /// <returns>new resident or null if there is no residence or workplace available</returns>
-        public static CityResident GenerateRandomCityResident(Map map)
+        public static CityResident GenerateRandomCityResident(City city)
         {
             ResidenceBlock residence;
             ShopBlock workplace;
             {
-                var availableResidences = map.GetAvailableResidences();
-                var availableWorkplaces = map.GetAvailableWorkplaces();
+                var availableResidences = city.map.GetAvailableResidences();
+                var availableWorkplaces = city.map.GetAvailableWorkplaces();
 
                 if (availableResidences.Count == 0 || availableWorkplaces.Count == 0) return null;
 
@@ -281,7 +309,7 @@ namespace Simcity
                 Faker.Name.First(),
                 Faker.Name.Last(),
                 Faker.RandomNumber.Next(0, 100),
-                map,
+                city,
                 residence,
                 workplace
             );
