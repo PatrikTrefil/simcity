@@ -14,6 +14,7 @@ namespace Simcity
         public TMPro.TMP_Text touristCountLabel;
         public readonly object touristLock;
         public List<Tourist> Tourists { get; }
+        public PublicTransport publicTransport;
 
         public City()
         {

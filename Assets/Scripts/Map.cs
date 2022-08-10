@@ -13,6 +13,7 @@ namespace Simcity
             public MapBlock RoadBlockPrefab;
             public MapBlock ShopBlockPrefab;
             public MapBlock ResidenceBlockPrefab;
+            public City city;
 
             public int GridSize { get; } = 8; // currently only square grids are supported
             public readonly MapBlock[,] blocks;

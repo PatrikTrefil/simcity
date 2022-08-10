@@ -120,5 +120,13 @@ namespace Simcity
             }
             Debug.Log($"TaxRatePercentage set to: {TaxRatePercentage} %");
         }
+
+        public void PublicTransportUpgrade()
+        {
+            lock (balanceLock)
+            {
+                Balance -= 1000;
+            }
+        }
     }
 }

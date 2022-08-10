@@ -8,12 +8,17 @@ namespace Simcity
     {
         sealed public class RoadBlock : MapBlock
         {
-            public int Level { get; } = 100;
+            private PublicTransport publicTransport;
+            public int Level { get; } = 1;
             public override int PeopleHereCapacity
             {
-                get => Level * 100;
+                get => Level * 100 * publicTransport.Level;
             }
             public RoadBlock() : base() { }
+            public void Awake()
+            {
+                publicTransport = transform.parent.gameObject.GetComponent<MapNamespace.Map>().city.publicTransport;
+            }
         }
     }
 }
