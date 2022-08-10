@@ -2,6 +2,7 @@ using Simcity.MapNamespace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 namespace Simcity
@@ -29,6 +30,8 @@ namespace Simcity
             StartCoroutine(SimulateCity());
 
             StartCoroutine(TouristVisiting());
+
+            StartCoroutine(RandomEvents());
         }
 
         private void Update()
@@ -161,6 +164,28 @@ namespace Simcity
                     }
                 }
                 yield return new WaitForSeconds(1);
+            }
+        }
+
+        private IEnumerator RandomEvents()
+        {
+            // give player some time to start game
+            yield return new WaitForSeconds(60);
+
+            while (true)
+            {
+                var rnd = Random.Range(1, 101);
+                if (rnd <= 10)
+                {
+                    EditorUtility.DisplayDialog("Tornado!!", "Tornado hit your city! You have to pay $1,000 for repairs.", "Okay, I will pay.");
+                    financeManager.BalanceChange(-1000);
+                }
+                else if (rnd <= 15)
+                {
+                    EditorUtility.DisplayDialog("Earthquake!!", "Earthquake hit your city! You have to pay $1,200 for repairs.", "Okay, I will pay");
+                    financeManager.BalanceChange(-1000);
+                }
+                yield return new WaitForSeconds(60);
             }
         }
     }

@@ -2010,7 +2010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 121f2fd71b35964419c53f2d9457899c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  game: {fileID: 0}
+  game: {fileID: 137280455}
   balanceLabel: {fileID: 689430395}
 --- !u!1 &411317268
 GameObject:

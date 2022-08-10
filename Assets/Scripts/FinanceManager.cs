@@ -128,5 +128,17 @@ namespace Simcity
                 Balance -= 1000;
             }
         }
+
+        /// <summary>
+        /// carry out a transaction given amount
+        /// </summary>
+        /// <param name="amount">if amount is positive, the money will be added to balance. if amount is negative, the money will be deducted from balance</param>
+        public void BalanceChange(int amount)
+        {
+            lock (balanceLock)
+            {
+                Balance += amount;
+            }
+        }
     }
 }
