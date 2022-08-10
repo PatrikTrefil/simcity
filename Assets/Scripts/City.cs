@@ -1,6 +1,7 @@
 using Simcity.MapNamespace;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -11,15 +12,19 @@ namespace Simcity
         public Population population;
         public Map map;
         public FinanceManager financeManager;
-        public List<Tourist> Tourists { get; }
+        public TMPro.TMP_Text touristCountLabel;
+        public ObservableCollection<Tourist> Tourists { get; }
 
         public City()
         {
-            Tourists = new List<Tourist>();
+            Tourists = new ObservableCollection<Tourist>();
         }
         // Start is called before the first frame update
         private void Start()
         {
+            touristCountLabel.text = population.People.Count.ToString();
+            Tourists.CollectionChanged += OnTouristChange;
+
             StartCoroutine(SimulateCity());
 
             StartCoroutine(TouristVisiting());
@@ -121,6 +126,18 @@ namespace Simcity
                     }
                 }
                 yield return new WaitForSeconds(1);
+            }
+        }
+
+        private void OnTouristChange(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset
+                )
+            {
+                touristCountLabel.text = Tourists.Count.ToString();
             }
         }
     }
