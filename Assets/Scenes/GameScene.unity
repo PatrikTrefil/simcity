@@ -6966,7 +6966,7 @@ GameObject:
   - component: {fileID: 1847603921}
   - component: {fileID: 1847603920}
   m_Layer: 5
-  m_Name: QuitButton
+  m_Name: BackToMainMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7038,8 +7038,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 137280455}
-        m_TargetAssemblyTypeName: Game, Assembly-CSharp
-        m_MethodName: OnQuitButtonClick
+        m_TargetAssemblyTypeName: Simcity.Game, Assembly-CSharp
+        m_MethodName: OnBackToMainMenuButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

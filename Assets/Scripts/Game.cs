@@ -12,7 +12,7 @@ namespace Simcity
         public City city;
         public TimeManager timeManager;
         public bool isGameLost = false;
-        public void OnQuitButtonClick()
+        public void OnBackToMainMenuButtonClick()
         {
             bool res = EditorUtility.DisplayDialog("Really want to go back to the main menu?", "Really want to go back? The game will be saved automatically.", "Yes", "No");
             if (res)

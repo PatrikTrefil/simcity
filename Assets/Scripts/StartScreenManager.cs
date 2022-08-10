@@ -17,5 +17,10 @@ namespace Simcity
             Game.ShouldLoadGame = true;
             SceneManager.LoadScene("GameScene");
         }
+
+        public void OnQuitButtonClick()
+        {
+            Application.Quit();
+        }
     }
 }
