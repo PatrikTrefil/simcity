@@ -1,7 +1,6 @@
 using Simcity.MapNamespace;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -13,21 +12,27 @@ namespace Simcity
         public Map map;
         public FinanceManager financeManager;
         public TMPro.TMP_Text touristCountLabel;
-        public ObservableCollection<Tourist> Tourists { get; }
+        public readonly object touristLock;
+        public List<Tourist> Tourists { get; }
 
         public City()
         {
-            Tourists = new ObservableCollection<Tourist>();
+            Tourists = new List<Tourist>();
+            touristLock = new object();
         }
         // Start is called before the first frame update
         private void Start()
         {
             touristCountLabel.text = population.People.Count.ToString();
-            Tourists.CollectionChanged += OnTouristChange;
 
             StartCoroutine(SimulateCity());
 
             StartCoroutine(TouristVisiting());
+        }
+
+        private void Update()
+        {
+            touristCountLabel.text = Tourists.Count.ToString();
         }
 
         private IEnumerator SimulateCity()
@@ -47,14 +52,15 @@ namespace Simcity
         {
             if (population.People.Count > 0)
             {
-                //Parallel.For(0, population.People.Count, (int index) =>
-                //{
-                //    population.People[index].SimulateOneStep();
-                //});
-                for (int i = 0; i < population.People.Count; i++)
+                // we have to copy the references because People can be modified
+                // during simulation
+                CityResident[] populationCopy = new CityResident[population.People.Count];
+                population.People.CopyTo(populationCopy);
+
+                Parallel.For(0, populationCopy.Length, (int index) =>
                 {
-                    population.People[i].SimulateOneStep();
-                }
+                    populationCopy[index].SimulateOneStep();
+                });
             }
             else
             {
@@ -62,10 +68,15 @@ namespace Simcity
             }
             if (Tourists.Count > 0)
             {
-                for (int i = 0; i < Tourists.Count; i++)
+                // we have to copy the references because Tourists can be modified
+                // during simulation
+                Tourist[] touristCopy = new Tourist[Tourists.Count];
+                Tourists.CopyTo(touristCopy);
+
+                Parallel.For(0, touristCopy.Length, (int index) =>
                 {
-                    Tourists[i].SimulateOneStep();
-                }
+                    touristCopy[index].SimulateOneStep();
+                });
             }
             else
             {
@@ -77,13 +88,27 @@ namespace Simcity
         /// put person on map, add to population,
         /// add to list of residents of its residence,
         /// add to list of workers of its workplace
+        ///
+        /// not atomic, but thread-safe
         /// </summary>
         public void AddCityResidentToCity(CityResident person)
         {
-            population.People.Add(person);
-            person.CurrentBlock.PeopleHere.Add(person);
-            person.Residence.Residents.Add(person);
-            person.Workplace.Workers.Add(person);
+            lock (population.peopleLock)
+            {
+                population.People.Add(person);
+            }
+            lock (person.CurrentBlock.peopleHereLock)
+            {
+                person.CurrentBlock.PeopleHere.Add(person);
+            }
+            lock (person.Residence.residentsLock)
+            {
+                person.Residence.Residents.Add(person);
+            }
+            lock (person.Workplace.workersLock)
+            {
+                person.Workplace.Workers.Add(person);
+            }
         }
 
         /// <summary>
@@ -105,10 +130,19 @@ namespace Simcity
             Tourists.Add(tourist);
             tourist.CurrentBlock.PeopleHere.Add(tourist);
         }
+        /// <summary>
+        /// thread-safe
+        /// </summary>
         public void RemoveTouristFromCity(Tourist tourist)
         {
-            Tourists.Remove(tourist);
-            tourist.CurrentBlock.PeopleHere.Remove(tourist);
+            lock (touristLock)
+            {
+                Tourists.Remove(tourist);
+            }
+            lock (tourist.CurrentBlock.peopleHereLock)
+            {
+                tourist.CurrentBlock.PeopleHere.Remove(tourist);
+            }
         }
         private IEnumerator TouristVisiting()
         {
@@ -126,18 +160,6 @@ namespace Simcity
                     }
                 }
                 yield return new WaitForSeconds(1);
-            }
-        }
-
-        private void OnTouristChange(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset
-                )
-            {
-                touristCountLabel.text = Tourists.Count.ToString();
             }
         }
     }

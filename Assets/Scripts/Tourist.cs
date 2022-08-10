@@ -40,7 +40,6 @@ namespace Simcity
                 notEndReached = shoppingEnumerator.MoveNext();
                 yield return null;
             }
-            // WARNING: not thread-safe
             City.RemoveTouristFromCity(this);
             Debug.Log($"[Tourist {FirstName} {LastName}] just left");
         }

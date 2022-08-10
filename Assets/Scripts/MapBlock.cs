@@ -11,11 +11,13 @@ namespace Simcity
             // TODO: price for maintainance
             public Vector2Int Coordinates { get; private set; }
             public List<Person> PeopleHere { get; }
+            public readonly object peopleHereLock;
             public abstract int PeopleHereCapacity { get; }
 
             public MapBlock()
             {
                 PeopleHere = new List<Person>();
+                peopleHereLock = new object();
             }
 
             public void OnClick()

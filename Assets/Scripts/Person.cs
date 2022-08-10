@@ -68,20 +68,35 @@ namespace Simcity
 
                 if (shop == null) throw new Exception("Shop is null");
 
-                shop.Shoppers.Add(this);
-
-                Debug.Log($"[{FirstName} {LastName}] Started shopping");
-
-                // spend 20 minutes in the shop
-                for (int i = 0; i < 20; i++)
+                bool successfulyStartedShopping = false;
+                lock (shop.shoppersLock)
                 {
-                    yield return null;
+                    if (shop.Shoppers.Count < shop.ShoppersCapacity)
+                    {
+                        shop.Shoppers.Add(this);
+                        successfulyStartedShopping = true;
+                    }
                 }
 
-                City.financeManager.ShopPayment();
-                shop.Shoppers.Remove(this);
+                if (successfulyStartedShopping)
+                {
+                    Debug.Log($"[{FirstName} {LastName}] Started shopping");
 
-                Debug.Log($"[{FirstName} {LastName}] Finished shopping");
+                    // spend 20 minutes in the shop
+                    for (int i = 0; i < 20; i++)
+                    {
+                        yield return null;
+                    }
+
+                    City.financeManager.ShopPayment();
+                    lock (shop.shoppersLock)
+                    {
+                        shop.Shoppers.Remove(this);
+                    }
+
+                    Debug.Log($"[{FirstName} {LastName}] Finished shopping");
+                }
+                // else go home, the shop is full
             }
 
 
@@ -266,22 +281,52 @@ namespace Simcity
         {
             if (destBlock != CurrentBlock)
             {
-                lock (City.map.blockLocks[destBlock.Coordinates.x, destBlock.Coordinates.y])
+                // we need to lock both the destination and current block
+                // we prevent deadlocks by locking in a specified order
+                object firstLock, secondLock;
                 {
-                    if (destBlock.PeopleHere.Count < destBlock.PeopleHereCapacity)
+                    if (destBlock.Coordinates.y < CurrentBlock.Coordinates.y)
                     {
-                        lock (City.map.blockLocks[CurrentBlock.Coordinates.x, CurrentBlock.Coordinates.y])
+                        firstLock = destBlock.peopleHereLock;
+                        secondLock = CurrentBlock.peopleHereLock;
+                    }
+                    else if (destBlock.Coordinates.y > CurrentBlock.Coordinates.y)
+                    {
+                        firstLock = CurrentBlock.peopleHereLock;
+                        secondLock = destBlock.peopleHereLock;
+                    }
+                    else
+                    {
+                        if (destBlock.Coordinates.x < CurrentBlock.Coordinates.x)
                         {
+                            firstLock = destBlock.peopleHereLock;
+                            secondLock = CurrentBlock.peopleHereLock;
+                        }
+                        else
+                        {
+                            firstLock = CurrentBlock.peopleHereLock;
+                            secondLock = destBlock.peopleHereLock;
+                        }
+                    }
+                }
+                lock (firstLock)
+                {
+                    lock (secondLock)
+                    {
+                        if (destBlock.PeopleHere.Count < destBlock.PeopleHereCapacity)
+                        {
+
                             CurrentBlock.PeopleHere.Remove(this);
                             destBlock.PeopleHere.Add(this);
                             CurrentBlock = destBlock;
                             Debug.Log($"{FirstName} {LastName} moved to ({destBlock.Coordinates.x}, {destBlock.Coordinates.y})");
                         }
-                    }
-                    else
-                    {
-                        // the capacity of the block is full
-                        return false;
+                        else
+                        {
+
+                            // the capacity of the block is full
+                            return false;
+                        }
                     }
                 }
             }

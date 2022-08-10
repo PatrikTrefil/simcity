@@ -52,7 +52,7 @@ namespace Simcity
             {
                 // actions
                 {
-                    int rnd = UnityEngine.Random.Range(1, 101);
+                    int rnd = new System.Random().Next(1, 100);
                     if (rnd < 50)
                     {
                         // go shopping
@@ -137,11 +137,10 @@ namespace Simcity
                 }
                 // consider moving out
                 {
-                    int rndMoveOut = UnityEngine.Random.Range(1, 101);
+                    int rndMoveOut = new System.Random().Next(1, 100);
                     if (rndMoveOut < City.financeManager.TaxRatePercentage / 10)
                     {
                         // move out
-                        // TODO: not thread-safe!!!
                         City.RemoveCityResidentFromCity(this);
                         Debug.Log($"[{FirstName} {LastName}] Moved out");
                     }

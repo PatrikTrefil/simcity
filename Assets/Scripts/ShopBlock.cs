@@ -13,12 +13,16 @@ namespace Simcity
             public int ShoppersCapacity { get; } = 100;
 
             public List<Person> Shoppers;
+            public readonly object shoppersLock;
             public List<CityResident> Workers;
+            public readonly object workersLock;
 
             public ShopBlock() : base()
             {
                 Workers = new List<CityResident>();
                 Shoppers = new List<Person>();
+                shoppersLock = new object();
+                workersLock = new object();
             }
         }
     }

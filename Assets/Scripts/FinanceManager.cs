@@ -9,6 +9,7 @@ namespace Simcity
 {
     public sealed class FinanceManager : MonoBehaviour
     {
+        public Game game;
         public TMPro.TMP_Text balanceLabel;
         private readonly float pricePerRoadMaintenance = 100;
         public int RoadBlockCount { get; set; }
@@ -37,12 +38,9 @@ namespace Simcity
             private set
             {
                 balance = value;
-                balanceLabel.text = balance.ToString("C2", cultureInfo);
                 if (balance < 0)
                 {
-                    // game lost
-                    EditorUtility.DisplayDialog("You lost", "Your balance has gone below zero.", "Go to main menu");
-                    SceneManager.LoadScene("StartScene");
+                    game.isGameLost = true;
                 }
             }
         }
@@ -61,6 +59,11 @@ namespace Simcity
             TaxRatePercentage = 20;
 
             StartCoroutine(RoadMaintenance());
+        }
+
+        private void Update()
+        {
+            balanceLabel.text = balance.ToString("C2", cultureInfo);
         }
 
         private IEnumerator RoadMaintenance()

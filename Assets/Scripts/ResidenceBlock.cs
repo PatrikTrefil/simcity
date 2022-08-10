@@ -11,9 +11,11 @@ namespace Simcity
             public override int PeopleHereCapacity { get => ResidentsCapacity; }
             public int ResidentsCapacity { get; } = 100;
             public List<CityResident> Residents;
+            public readonly object residentsLock;
             public ResidenceBlock() : base()
             {
                 Residents = new List<CityResident>();
+                residentsLock = new object();
             }
         }
     }

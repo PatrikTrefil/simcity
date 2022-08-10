@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
 
@@ -10,18 +9,18 @@ namespace Simcity
     {
         public City city;
         public TMP_Text populationCountLabel;
-        public ObservableCollection<CityResident> People { get; }
+        public List<CityResident> People { get; }
+        public readonly object peopleLock;
 
         public Population()
         {
-            People = new ObservableCollection<CityResident>();
+            People = new List<CityResident>();
+            peopleLock = new object();
         }
         // Start is called before the first frame update
         private void Start()
         {
             populationCountLabel.text = People.Count.ToString();
-
-            People.CollectionChanged += OnPeopleChange;
 
             StartCoroutine(MovingInOfResidents());
 
@@ -31,21 +30,9 @@ namespace Simcity
         }
 
         // Update is called once per frame
-        private void Update() { }
-
-        /// <summary>
-        /// Updates population count on actions which modify count
-        /// </summary>
-        private void OnPeopleChange(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Update()
         {
-            if (
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset
-                )
-            {
-                populationCountLabel.text = People.Count.ToString();
-            }
+            populationCountLabel.text = People.Count.ToString();
         }
 
         /// <summary>
