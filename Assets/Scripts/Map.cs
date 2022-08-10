@@ -54,6 +54,23 @@ namespace Simcity
                 return availableResidences;
             }
 
+            public List<RoadBlock> GetAvailableRoads()
+            {
+                var avalableRoads = new List<RoadBlock>();
+                for (int y = 0; y < blocks.GetLength(1); y++)
+                {
+                    for (int x = 0; x < blocks.GetLength(0); x++)
+                    {
+                        var roadBlock = blocks[x, y].GetComponent<RoadBlock>();
+                        if (roadBlock != null && roadBlock.PeopleHereCapacity > roadBlock.PeopleHere.Count)
+                            avalableRoads.Add(roadBlock);
+
+                    }
+                }
+
+                return avalableRoads;
+            }
+
             public List<ShopBlock> GetAvailableWorkplaces()
             {
                 var availableWorkplaces = new List<ShopBlock>();

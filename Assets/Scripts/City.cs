@@ -11,11 +11,18 @@ namespace Simcity
         public Population population;
         public Map map;
         public FinanceManager financeManager;
+        public List<Tourist> Tourists { get; }
 
+        public City()
+        {
+            Tourists = new List<Tourist>();
+        }
         // Start is called before the first frame update
         private void Start()
         {
             StartCoroutine(SimulateCity());
+
+            StartCoroutine(TouristVisiting());
         }
 
         private IEnumerator SimulateCity()
@@ -46,7 +53,18 @@ namespace Simcity
             }
             else
             {
-                Debug.Log("Nothing to simulate, there are no people.");
+                Debug.Log("Nothing to simulate, there are no residents.");
+            }
+            if (Tourists.Count > 0)
+            {
+                for (int i = 0; i < Tourists.Count; i++)
+                {
+                    Tourists[i].SimulateOneStep();
+                }
+            }
+            else
+            {
+                Debug.Log("Nothing to simulate, there are no tourists.");
             }
         }
 
@@ -75,6 +93,35 @@ namespace Simcity
             person.CurrentBlock.PeopleHere.Remove(person);
             person.Residence.Residents.Remove(person);
             person.Workplace.Workers.Remove(person);
+        }
+
+        public void AddTouristToCity(Tourist tourist)
+        {
+            Tourists.Add(tourist);
+            tourist.CurrentBlock.PeopleHere.Add(tourist);
+        }
+        public void RemoveTouristFromCity(Tourist tourist)
+        {
+            Tourists.Remove(tourist);
+            tourist.CurrentBlock.PeopleHere.Remove(tourist);
+        }
+        private IEnumerator TouristVisiting()
+        {
+            while (true)
+            {
+                var rnd = Random.Range(0, 100);
+                if (rnd < 40)
+                {
+                    // tourist comes in
+                    Tourist tourist = Tourist.GenerateRandomTourist(this);
+                    if (tourist != null)
+                    {
+                        AddTouristToCity(tourist);
+                        Debug.Log($"Tourist {tourist.FirstName} just came to visit");
+                    }
+                }
+                yield return new WaitForSeconds(1);
+            }
         }
     }
 }
