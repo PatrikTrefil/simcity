@@ -104,6 +104,42 @@ namespace Simcity
 
                 return availableShops;
             }
+
+            public void LoadFromMapData(SaveSystem.GameData.CityData.MapData mapData)
+            {
+                foreach (var shopBlockData in mapData.shopBlockData)
+                {
+                    var x = shopBlockData.coordinates[0];
+                    var y = shopBlockData.coordinates[1];
+                    // detach from parent (to make sibling indices work)
+                    blocks[x, y].transform.parent = null;
+                    Destroy(blocks[x, y].gameObject);
+                    blocks[x, y] = MapBlock.MakeMapBlock(ShopBlockPrefab, transform, new Vector2Int(x, y));
+                    blocks[x, y].transform.SetSiblingIndex((GridSize * y) + x);
+                }
+                foreach (var roadBlockData in mapData.roadBlockData)
+                {
+                    var x = roadBlockData.coordinates[0];
+                    var y = roadBlockData.coordinates[1];
+                    // detach from parent (to make sibling indices work)
+                    blocks[x, y].transform.parent = null;
+                    Destroy(blocks[x, y].gameObject);
+                    blocks[x, y] = MapBlock.MakeMapBlock(RoadBlockPrefab, transform, new Vector2Int(x, y));
+                    blocks[x, y].transform.SetSiblingIndex((GridSize * y) + x);
+                    (blocks[x, y] as RoadBlock).Level = roadBlockData.level;
+                }
+                foreach (var residenceBlockData in mapData.residenceBlockData)
+                {
+                    var x = residenceBlockData.coordinates[0];
+                    var y = residenceBlockData.coordinates[1];
+                    // detach from parent (to make sibling indices work)
+                    blocks[x, y].transform.parent = null;
+                    Destroy(blocks[x, y].gameObject);
+                    blocks[x, y] = MapBlock.MakeMapBlock(ResidenceBlockPrefab, transform, new Vector2Int(x, y));
+                    blocks[x, y].transform.SetSiblingIndex((GridSize * y) + x);
+                    Debug.Log($"Placed residence at {x} {y} (sibling index: ${(GridSize * y) + x}");
+                }
+            }
         }
     }
 }

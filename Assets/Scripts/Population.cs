@@ -98,5 +98,22 @@ namespace Simcity
                 }
             }
         }
+
+        public void LoadFromResidentData(SaveSystem.GameData.CityData.ResidentData[] residentData)
+        {
+            foreach (var resident in residentData)
+            {
+                Debug.Log(resident.residenceCoordinates[0]);
+                Debug.Log(resident.residenceCoordinates[1]);
+                Debug.Log(resident.workplaceCoordinates[0]);
+                Debug.Log(resident.workplaceCoordinates[1]);
+                var residence = city.map.blocks[resident.residenceCoordinates[0], resident.residenceCoordinates[1]] as MapNamespace.ResidenceBlock;
+                var workplace = city.map.blocks[resident.workplaceCoordinates[0], resident.workplaceCoordinates[1]] as MapNamespace.ShopBlock;
+
+                if (residence == null || workplace == null) throw new System.Exception("Residence or workplace from data not found");
+
+                city.AddCityResidentToCity(new CityResident(resident.firstName, resident.lastName, resident.age, city, residence, workplace));
+            }
+        }
     }
 }

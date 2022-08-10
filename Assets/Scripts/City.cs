@@ -188,5 +188,13 @@ namespace Simcity
                 yield return new WaitForSeconds(60);
             }
         }
+
+        public void LoadFromCityData(SaveSystem.GameData.CityData cityData)
+        {
+            map.LoadFromMapData(cityData.mapData);
+            financeManager.LoadFromFinanceManagerData(cityData.financeManagerData);
+            population.LoadFromResidentData(cityData.residentData);
+            publicTransport.LoadFromPublicTransportData(cityData.publicTransportData);
+        }
     }
 }

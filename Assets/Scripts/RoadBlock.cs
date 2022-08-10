@@ -10,7 +10,7 @@ namespace Simcity
         {
             private PublicTransport publicTransport;
             private City city;
-            public int Level { get; private set; } = 1;
+            public int Level { get; set; } = 1;
             private readonly int maxLevel = 5;
             public override int PeopleHereCapacity
             {

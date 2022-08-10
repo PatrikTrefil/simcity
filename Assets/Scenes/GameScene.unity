@@ -804,6 +804,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192557f82e0178c4c98f2c11d95890e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  city: {fileID: 643128869}
+  timeManager: {fileID: 64967804}
   isGameLost: 0
 --- !u!1 &144621873
 GameObject:
@@ -2013,6 +2015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 137280455}
+  taxRateInputField: {fileID: 1159411388}
   balanceLabel: {fileID: 689430395}
 --- !u!1 &411317268
 GameObject:

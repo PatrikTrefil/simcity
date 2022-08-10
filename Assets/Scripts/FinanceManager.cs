@@ -10,6 +10,7 @@ namespace Simcity
     public sealed class FinanceManager : MonoBehaviour
     {
         public Game game;
+        public TMPro.TMP_InputField taxRateInputField;
         public TMPro.TMP_Text balanceLabel;
         private readonly float pricePerRoadMaintenance = 100;
         public int RoadBlockCount { get; set; }
@@ -49,14 +50,15 @@ namespace Simcity
         {
             cultureInfo = System.Globalization.CultureInfo.GetCultureInfo("en-us");
             balanceLock = new object();
-        }
-
-        private void Awake()
-        {
             // start balance
             Balance = 10000;
             // start tax rate
             TaxRatePercentage = 20;
+        }
+
+        private void Start()
+        {
+            taxRateInputField.text = TaxRatePercentage.ToString();
 
             StartCoroutine(RoadMaintenance());
         }
@@ -147,6 +149,14 @@ namespace Simcity
             {
                 Balance -= 1000;
             }
+        }
+
+        public void LoadFromFinanceManagerData(SaveSystem.GameData.CityData.FinanceManagerData financeManagerData)
+        {
+            Balance = financeManagerData.balance;
+            TaxRatePercentage = financeManagerData.taxRatePercentage;
+            RoadBlockCount = financeManagerData.roadBlockCount;
+            taxRateInputField.text = TaxRatePercentage.ToString();
         }
     }
 }

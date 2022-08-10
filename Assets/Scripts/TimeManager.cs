@@ -24,7 +24,7 @@ namespace Simcity
         public float RealwordSecondsFromBeginning
         {
             get => realworldSecondsFromBeginning;
-            private set
+            set
             {
                 realworldSecondsFromBeginning = value;
                 // Update label in UI
@@ -35,10 +35,9 @@ namespace Simcity
         public TMP_Dropdown timeScaleDropdown;
         public TMP_Text textComponent;
 
-        // Start is called before the first frame update
-        private void Start()
+        public TimeManager()
         {
-            RealwordSecondsFromBeginning = 0;
+            realworldSecondsFromBeginning = 0;
         }
 
         // Update is called once per frame
@@ -84,6 +83,12 @@ namespace Simcity
         private float RealworldSecondsToGametimeSecondsFromBeginning(float realworldSecondsFromBeginning)
         {
             return realworldSecondsFromBeginning * realTimeToGameTimeFactor;
+        }
+
+        public void LoadFromTimeManagerData(SaveSystem.GameData.TimeManagerData timeManagerData)
+        {
+
+            RealwordSecondsFromBeginning = timeManagerData.realworldSecondsFromBeginning;
         }
     }
 }

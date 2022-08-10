@@ -22,5 +22,10 @@ namespace Simcity
         {
             publicTransportLevelLabel.text = Level.ToString();
         }
+
+        public void LoadFromPublicTransportData(SaveSystem.GameData.CityData.PublicTransportData publicTransportData)
+        {
+            Level = publicTransportData.level;
+        }
     }
 }
