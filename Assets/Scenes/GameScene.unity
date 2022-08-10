@@ -905,6 +905,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Bulldoze
       m_Image: {fileID: 0}
+    - m_Text: Upgrade road
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2627,7 +2629,7 @@ MonoBehaviour:
   map: {fileID: 1037542859}
   financeManager: {fileID: 408266854}
   touristCountLabel: {fileID: 729655059}
-  publicTransport: {fileID: 0}
+  publicTransport: {fileID: 62416453}
 --- !u!1 &665082439
 GameObject:
   m_ObjectHideFlags: 0

@@ -140,5 +140,13 @@ namespace Simcity
                 Balance += amount;
             }
         }
+
+        public void RoadUpgrade()
+        {
+            lock (balanceLock)
+            {
+                Balance -= 1000;
+            }
+        }
     }
 }

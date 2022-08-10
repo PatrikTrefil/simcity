@@ -37,6 +37,13 @@ namespace Simcity
                     case "Bulldoze":
                         chosenPrefab = map.DefaultBlockPrefab;
                         break;
+                    case "Upgrade road":
+                        var roadBlock = map.blocks[coordinates.x, coordinates.y] as RoadBlock;
+                        if (roadBlock != null)
+                        {
+                            roadBlock.UpgradeRoad();
+                        }
+                        return;
                     default:
                         throw new System.ArgumentException("Unknown editor mode");
                 }

@@ -9,7 +9,9 @@ namespace Simcity
         sealed public class RoadBlock : MapBlock
         {
             private PublicTransport publicTransport;
-            public int Level { get; } = 1;
+            private City city;
+            public int Level { get; private set; } = 1;
+            private readonly int maxLevel = 5;
             public override int PeopleHereCapacity
             {
                 get => Level * 100 * publicTransport.Level;
@@ -17,7 +19,18 @@ namespace Simcity
             public RoadBlock() : base() { }
             public void Awake()
             {
-                publicTransport = transform.parent.gameObject.GetComponent<MapNamespace.Map>().city.publicTransport;
+                city = transform.parent.gameObject.GetComponent<Map>().city;
+                Debug.Log($"City: {city}");
+                publicTransport = city.publicTransport;
+            }
+
+            public void UpgradeRoad()
+            {
+                if (Level < maxLevel)
+                {
+                    Level++;
+                    city.financeManager.RoadUpgrade();
+                }
             }
         }
     }
