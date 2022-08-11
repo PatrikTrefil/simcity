@@ -29,7 +29,6 @@ namespace Simcity
                         break;
                     case "Build road":
                         chosenPrefab = map.RoadBlockPrefab;
-                        city.financeManager.RoadBlockCount++;
                         break;
                     case "Build shop":
                         chosenPrefab = map.ShopBlockPrefab;
@@ -51,10 +50,6 @@ namespace Simcity
                 var x = coordinates.x;
                 var y = coordinates.y;
 
-                if (map.blocks[x, y] is RoadBlock)
-                {
-                    city.financeManager.RoadBlockCount--;
-                }
 
                 // remove all people involved with this block
                 {

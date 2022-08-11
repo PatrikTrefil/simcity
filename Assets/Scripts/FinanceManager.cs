@@ -11,8 +11,7 @@ namespace Simcity
         public Game game;
         public TMPro.TMP_InputField taxRateInputField;
         public TMPro.TMP_Text balanceLabel;
-        private readonly float pricePerRoadMaintenance = 100;
-        public int RoadBlockCount { get; set; }
+        private readonly float pricePerSingleRoadMaintenance = 100;
         public float TaxRatePercentage { get; private set; }
         /// <summary>
         /// used for formatting currency output
@@ -71,14 +70,22 @@ namespace Simcity
         {
             while (true)
             {
-                float priceForRoadMaintenance = RoadBlockCount * pricePerRoadMaintenance;
+                float priceForRoadMaintenance = 0;
+                for (int x = 0; x < game.city.map.blocks.GetLength(0); x++)
+                {
+                    for (int y = 0; y < game.city.map.blocks.GetLength(1); y++)
+                    {
+                        var currBlock = game.city.map.blocks[x, y];
+                        if (currBlock is MapNamespace.RoadBlock)
+                        {
+                            priceForRoadMaintenance += (currBlock as MapNamespace.RoadBlock).Level * pricePerSingleRoadMaintenance;
+                        }
+                    }
+                }
                 Debug.Log($"Paying for road maintenance (${priceForRoadMaintenance})");
                 if (priceForRoadMaintenance > 0)
                 {
-                    lock (balanceLock)
-                    {
-                        Balance -= priceForRoadMaintenance;
-                    }
+                    BalanceChange(-priceForRoadMaintenance);
                 }
                 // wait one day
                 yield return new WaitForSeconds(60 * 24);
@@ -134,7 +141,7 @@ namespace Simcity
         /// carry out a transaction given amount
         /// </summary>
         /// <param name="amount">if amount is positive, the money will be added to balance. if amount is negative, the money will be deducted from balance</param>
-        public void BalanceChange(int amount)
+        public void BalanceChange(float amount)
         {
             lock (balanceLock)
             {
@@ -154,7 +161,6 @@ namespace Simcity
         {
             Balance = financeManagerData.balance;
             TaxRatePercentage = financeManagerData.taxRatePercentage;
-            RoadBlockCount = financeManagerData.roadBlockCount;
             taxRateInputField.text = TaxRatePercentage.ToString();
         }
     }

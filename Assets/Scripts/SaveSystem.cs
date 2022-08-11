@@ -56,12 +56,10 @@ namespace Simcity
                 {
                     public float taxRatePercentage;
                     public float balance;
-                    public int roadBlockCount;
                     public FinanceManagerData(FinanceManager financeManager)
                     {
                         taxRatePercentage = financeManager.TaxRatePercentage;
                         balance = financeManager.Balance;
-                        roadBlockCount = financeManager.RoadBlockCount;
                     }
                 }
                 [System.Serializable]
