@@ -59,6 +59,8 @@ namespace Simcity
             taxRateInputField.text = TaxRatePercentage.ToString();
 
             StartCoroutine(RoadMaintenance());
+
+            StartCoroutine(PublicTransportMaintenance());
         }
 
         private void Update()
@@ -134,6 +136,19 @@ namespace Simcity
             lock (balanceLock)
             {
                 Balance -= 1000;
+            }
+        }
+
+        public IEnumerator PublicTransportMaintenance()
+        {
+            while (true)
+            {
+                var pricePerLevel = 1000;
+                var totalPrice = pricePerLevel * game.city.publicTransport.Level;
+                BalanceChange(-totalPrice);
+                Debug.Log($"Paid ${totalPrice} for maintenance of public transport");
+                // wait for one day
+                yield return new WaitForSeconds(60 * 24);
             }
         }
 
