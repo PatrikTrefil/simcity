@@ -184,5 +184,10 @@ namespace Simcity
             }
             return gameData;
         }
+
+        public static void RemoveSavedGame()
+        {
+            File.Delete(pathToGameData);
+        }
     }
 }

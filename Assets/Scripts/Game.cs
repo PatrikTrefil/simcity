@@ -42,7 +42,7 @@ namespace Simcity
         {
             if (isGameLost)
             {
-                // TODO: remove saved game
+                SaveSystem.RemoveSavedGame();
                 SceneManager.LoadScene("LostScene");
             }
         }
