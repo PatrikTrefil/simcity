@@ -8,7 +8,6 @@ namespace Simcity
     {
         abstract public class MapBlock : MonoBehaviour
         {
-            // TODO: price for maintainance
             public Vector2Int Coordinates { get; private set; }
             public List<Person> PeopleHere { get; }
             public readonly object peopleHereLock;
