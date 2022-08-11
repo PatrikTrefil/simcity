@@ -63,8 +63,8 @@ namespace Simcity
                         }
                         else
                         {
-                            // TODO: remove tourists too
-                            throw new System.NotImplementedException();
+                            Tourist tourist = person as Tourist;
+                            city.RemoveTouristFromCity(tourist);
                         }
                     }
                     // if it's a shop block, then remove all shoppers and workers
