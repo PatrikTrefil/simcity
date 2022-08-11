@@ -260,7 +260,6 @@ namespace Simcity
                         }
                         else
                         {
-                            // TODO: implement retries
                             Debug.Log($"[{FirstName} {LastName}] moving to {block.Coordinates.x}, {block.Coordinates.y} failed");
                             yield return false;
                         }
