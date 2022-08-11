@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,13 +13,9 @@ namespace Simcity
         public bool isGameLost = false;
         public void OnBackToMainMenuButtonClick()
         {
-            bool res = EditorUtility.DisplayDialog("Really want to go back to the main menu?", "Really want to go back? The game will be saved automatically.", "Yes", "No");
-            if (res)
-            {
-                var gameData = new SaveSystem.GameData(this);
-                SaveSystem.SaveGame(gameData);
-                SceneManager.LoadScene("StartScene");
-            }
+            var gameData = new SaveSystem.GameData(this);
+            SaveSystem.SaveGame(gameData);
+            SceneManager.LoadScene("StartScene");
         }
         private void Start()
         {
@@ -47,8 +42,8 @@ namespace Simcity
         {
             if (isGameLost)
             {
-                EditorUtility.DisplayDialog("You lost", "Your balance has gone below zero.", "Go to main menu");
-                SceneManager.LoadScene("StartScene");
+                // TODO: remove saved game
+                SceneManager.LoadScene("LostScene");
             }
         }
     }
