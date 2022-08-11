@@ -2,7 +2,6 @@ using Simcity.MapNamespace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 namespace Simcity
@@ -177,13 +176,13 @@ namespace Simcity
                 var rnd = Random.Range(1, 101);
                 if (rnd <= 10)
                 {
-                    EditorUtility.DisplayDialog("Tornado!!", "Tornado hit your city! You have to pay $1,000 for repairs.", "Okay, I will pay.");
+                    // earthquake
                     financeManager.BalanceChange(-1000);
                 }
                 else if (rnd <= 15)
                 {
-                    EditorUtility.DisplayDialog("Earthquake!!", "Earthquake hit your city! You have to pay $1,200 for repairs.", "Okay, I will pay");
-                    financeManager.BalanceChange(-1000);
+                    // tornado
+                    financeManager.BalanceChange(-1500);
                 }
                 yield return new WaitForSeconds(60);
             }
