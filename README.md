@@ -9,6 +9,15 @@ a simple yet engaging simulation where players can construct buildings, manage r
 - 🔄 Simulation Mechanics – Manage resources, population, and economy.
 - ⚡ Real-time Updates – Watch your city evolve dynamically based on decisions.
 
-## Documentation
+## 🚀 Installation
+
+The simplest way to play is to follow these steps:
+
+1. Go to [Releases page](https://github.com/PatrikTrefil/simcity/releases).
+2. Download the build for your platform.
+3. Enjoy.
+
+
+## 📑 Documentation
 
 The user manual and technical documentation can be found in the [Github Wiki](https://github.com/PatrikTrefil/simcity/wiki) (Czech only).
