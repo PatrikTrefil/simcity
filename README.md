@@ -8,3 +8,7 @@ a simple yet engaging simulation where players can construct buildings, manage r
 - 🏗️ City Building – Place roads, buildings, and infrastructure to grow your city.
 - 🔄 Simulation Mechanics – Manage resources, population, and economy.
 - ⚡ Real-time Updates – Watch your city evolve dynamically based on decisions.
+
+## Documentation
+
+The user manual and technical documentation can be found in the [Github Wiki](https://github.com/PatrikTrefil/simcity/wiki) (Czech only).
